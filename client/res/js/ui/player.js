@@ -6,7 +6,7 @@ export class Player {
         this.width = 50;
         this.height = 50;
         this.color = "red";
-        this.velocity = 2;
+        this.velocity = 5;
     }
 
     draw(ctx) {

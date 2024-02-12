@@ -1,5 +1,5 @@
 html, body {
-    cursor: none;
+    cursor: url("../img/background/cursor.png"), auto;
     overflow: hidden;
     margin: 0;
     display: flex;
