@@ -20,11 +20,12 @@ let mouse = {
     y:0
 }
 document.addEventListener("click", (e) => {
+    const canvasPos = canvas.getBoundingClientRect();
     mouse.x = ((e.clientX - canvasPos.left) / canvasPos.width) * canvas.width;
     mouse.y = ((e.clientY - canvasPos.top) / canvasPos.height) * canvas.height;
-    const canvasPos = canvas.getBoundingClientRect();
     console.log(canvasPos.top);
     console.log(canvasPos.left);
+    click.update(mouse.x, mouse.y)
 })
 
 const gameLoop = () => {
@@ -42,16 +43,12 @@ const gameLoop = () => {
 
 const clear = () => {
     background.draw(ctx, player);
-    player.draw(ctx)
 
 };
 const resize = () => {
     canvas.width = 1280
     canvas.height = 720
 };
-const render = () => {};
-const fps = () => {};
-
 
 window.onload = () => {
     window.requestAnimationFrame(gameLoop);
@@ -76,4 +73,17 @@ const handlePlayerMovement = () => {
     if (keys["KeyD"]) {
         player.x += player.velocity;
     }
+}
+
+const render = () => {
+    player.draw(ctx)
+    ctx.fillStyle = "purple";
+    ctx.fillRect(mouse.x - 10, mouse.y - 10, 20, 20);
+    
+};
+const fps = () => {};
+
+window.onload = () => {
+    window.requestAnimationFrame(gameLoop);
+    document.body.oncontextmenu = () => false;
 }
