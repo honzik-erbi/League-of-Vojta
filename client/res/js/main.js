@@ -121,10 +121,16 @@ const handlePlayerMovement = () => {
 }
 
 const render = () => {
-    player.draw(ctx)
-    ctx.fillStyle = "purple";
-    ctx.fillRect(mouse.x - 10, mouse.y - 10, 20, 20);
-    
+    users.forEach((p, id) => {
+        if (playerId == id) return;
+        console.log(p, id);
+        ctx.strokeStyle = "red";
+        ctx.strokeRect(
+        p.x-player.x + 1280 / 2 - player.width / 2,
+        p.y-player.y + 720 / 2 - player.width / 2, 50, 50)
+        
+        console.log(p);
+    });
 };
 const fps = () => {};
 
