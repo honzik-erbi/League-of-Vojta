@@ -1,5 +1,51 @@
 import { Background } from "./ui/basic-utils.js";
 import { Player } from "./ui/player.js";
+
+const playerId = Math.floor(Math.random() * 10000000)
+const socket = io('http://localhost:3000')
+
+const sendSpawnInfoToServer = () => {
+    const payload = {
+        id: playerId,
+        position: {
+            x: player.x,
+            y: player.y
+        }
+    }
+    socket.emit('spawn', payload)
+}
+
+const users = new Map()
+
+socket.on('new user connected', (data) => {
+    console.log(data)
+    data.map((element) => {
+        users.set(element[0], element[1])
+    })
+    console.log(users)
+})
+
+socket.on('user disconnected', (user) => {
+    users.delete(user)
+    console.log(users)
+})
+
+const sendPlayerUpdate = () => {
+    const payload = {
+        id: playerId,
+        position: {
+            x: player.x,
+            y: player.y
+        }
+    }
+    socket.emit('playerpos', payload)
+}
+
+socket.on('playerpos', (data) => {
+    if (data.id === playerId) return
+    users.set(data.id, data.position)
+})
+
 const background = new Background();
 const player = new Player(3000, 2000);
 
@@ -50,11 +96,9 @@ const resize = () => {
     canvas.height = 720
 };
 
-window.onload = () => {
-    window.requestAnimationFrame(gameLoop);
-}
 const update = () => {
     handlePlayerMovement();
+    sendPlayerUpdate()
 }
 
 
@@ -73,6 +117,7 @@ const handlePlayerMovement = () => {
     if (keys["KeyD"]) {
         player.x += player.velocity;
     }
+
 }
 
 const render = () => {
@@ -84,6 +129,7 @@ const render = () => {
 const fps = () => {};
 
 window.onload = () => {
+    sendSpawnInfoToServer()
     window.requestAnimationFrame(gameLoop);
     document.body.oncontextmenu = () => false;
 }
